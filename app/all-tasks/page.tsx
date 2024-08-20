@@ -1,13 +1,22 @@
- "use client";
+"use client";
 
 import React, { useState } from 'react'; // Importação correta do React e useState
 
+// Interface para os props do Header
+interface HeaderProps {
+  name: string;
+}
 
 // Componente Header
-const Header = ({ name }) => <h1>{name}</h1>;
+const Header: React.FC<HeaderProps> = ({ name }) => <h1>{name}</h1>;
+
+// Interface para os props do Pesquisar
+interface PesquisarProps {
+  onSearch: (searchText: string) => void;
+}
 
 // Componente Pesquisar
-const Pesquisar = ({ onSearch }) => {
+const Pesquisar: React.FC<PesquisarProps> = ({ onSearch }) => {
   const [pesquisar, setPesquisar] = useState("");
 
   const handleSearch = () => {
@@ -28,18 +37,24 @@ const Pesquisar = ({ onSearch }) => {
   );
 };
 
+// Interface para os props do Filtrar
+interface FiltrarProps {
+  onFilterChange: (filter: string) => void;
+  onSortChange: (sortOrder: string) => void;
+}
+
 // Componente Filtrar
-const Filtrar = ({ onFilterChange, onSortChange }) => {
+const Filtrar: React.FC<FiltrarProps> = ({ onFilterChange, onSortChange }) => {
   const [filtrar, setFiltrar] = useState("All");
   const [sort, setSort] = useState("Asc");
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newFilter = e.target.value;
     setFiltrar(newFilter);
     onFilterChange(newFilter);
   };
 
-  const handleSortChange = (newSortOrder) => {
+  const handleSortChange = (newSortOrder: string) => {
     setSort(newSortOrder);
     onSortChange(newSortOrder);
   };
@@ -64,8 +79,24 @@ const Filtrar = ({ onFilterChange, onSortChange }) => {
   );
 };
 
+// Interface para a tarefa
+interface Task {
+  id: number;
+  texto: string;
+  categoria: string;
+  isCompleted: boolean;
+  dataInicio: string;
+  dataFim: string;
+  nome: string;
+}
+
+// Interface para os props do CriarTarefas
+interface CriarTarefasProps {
+  onAddTask: (task: Task) => void;
+}
+
 // Componente CriarTarefas
-const CriarTarefas = ({ onAddTask }) => {
+const CriarTarefas: React.FC<CriarTarefasProps> = ({ onAddTask }) => {
   const [texto, setTexto] = useState("");
   const [categoria, setCategoria] = useState("To Do");
   const [dataInicio, setDataInicio] = useState("");
@@ -73,7 +104,7 @@ const CriarTarefas = ({ onAddTask }) => {
   const [nome, setNome] = useState("");
 
   const handleAddTask = () => {
-    const novaTarefa = {
+    const novaTarefa: Task = {
       id: Math.floor(Math.random() * 10000),
       texto,
       categoria,
@@ -128,25 +159,25 @@ const CriarTarefas = ({ onAddTask }) => {
 };
 
 // Componente App
-function App() {
-  const [todos, setTodos] = useState([]);
+const App: React.FC = () => {
+  const [todos, setTodos] = useState<Task[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Asc");
 
   // Função para adicionar uma nova tarefa
-  const addTask = (task) => {
+  const addTask = (task: Task) => {
     setTodos([...todos, task]);
   };
 
   // Função para remover uma tarefa pelo ID
-  const removeTodo = (id) => {
+  const removeTodo = (id: number) => {
     const filteredTodos = todos.filter(todo => todo.id !== id);
     setTodos(filteredTodos);
   };
 
   // Função para alternar o estado de conclusão de uma tarefa
-  const completeTodo = (id) => {
+  const completeTodo = (id: number) => {
     const updatedTodos = todos.map(todo =>
       todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
     );
