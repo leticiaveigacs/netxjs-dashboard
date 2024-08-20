@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import React, { useState } from 'react'; // Importação correta do React e useState
 
@@ -211,3 +211,4 @@ function App() {
 export default function Page() {
   return <App />;
 }
+ */
